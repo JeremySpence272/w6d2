@@ -80,9 +80,15 @@ const SatelliteTable: React.FC<SatelliteTableProps> = ({ satellites }) => {
 							<td>{sat.satlng}</td>
 							<td>
 								{sat.moreInfo ? (
-									<button onClick={() => handleMoreInfoClick(sat)}>
-										More Info
-									</button>
+									sat.satid === moreInfoSelected?.satid ? (
+										<button onClick={() => handleMoreInfoClick(sat)}>
+											More Info 👆
+										</button>
+									) : (
+										<button onClick={() => handleMoreInfoClick(sat)}>
+											More Info 👇
+										</button>
+									)
 								) : (
 									"No Other Data"
 								)}
