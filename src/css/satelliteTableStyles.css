@@ -1,0 +1,19 @@
+th,
+td {
+	padding: 15px;
+	border-bottom: 1px solid #ddd;
+}
+
+th {
+	font-weight: 800;
+	background-color: whitesmoke;
+	color: #242424;
+}
+
+td {
+	font-weight: 600;
+}
+
+table {
+	width: 100%;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useFetchData from "./hooks/useFetchData";
 import { Satellite } from "./types";
+import SatelliteTable from "./components/SatelliteTable";
 
 const App: React.FC = () => {
 	const { satellites: satData, isPending, error } = useFetchData();
@@ -19,15 +20,16 @@ const App: React.FC = () => {
 			{error && <h4>Error fetching date...</h4>}
 			{!isPending && !error && satellites && (
 				<>
-					<h2>Displaying {satellites.length} satellites</h2>
-					<ul>
+					<h4>Displaying {satellites.length} satellites</h4>
+					<SatelliteTable satellites={satellites} />
+					{/* <ul>
 						{satellites.map((sat) => (
 							<li key={sat.satid}>
 								{sat.satid}
 								{sat.moreInfo && <p>{JSON.stringify(sat.moreInfo)}</p>}
 							</li>
 						))}
-					</ul>
+					</ul> */}
 				</>
 			)}
 		</>
