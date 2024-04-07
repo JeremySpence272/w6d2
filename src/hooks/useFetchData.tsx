@@ -5,19 +5,32 @@ import {
 	ApiResponse,
 	MoreInfo,
 	SatelliteInfoCollection,
+	Coordinates,
+	Category,
 } from "../types";
 import satelliteMoreInfo from "../../data/satellite-more-info.json";
 
-type UseFetchDataResult = {
+export type UseFetchDataResult = {
 	satellites: Satellite[] | null;
 	isPending: boolean;
 	error: any | null;
+	API_ENDPOINT: string;
 };
+
+interface UseFetchDataProps {
+	coordinates: Coordinates;
+	category: Category;
+	radius: number;
+}
 
 const typedSatelliteMoreInfo: SatelliteInfoCollection =
 	satelliteMoreInfo as SatelliteInfoCollection;
 
-const useFetchData = (): UseFetchDataResult => {
+const useFetchData = ({
+	coordinates,
+	category,
+	radius,
+}: UseFetchDataProps): UseFetchDataResult => {
 	const [N2YOsatellites, setN2YOSatellites] = useState<Satellite[] | null>(
 		null
 	);
@@ -49,7 +62,6 @@ const useFetchData = (): UseFetchDataResult => {
 			Source7,
 		].filter((source) => source);
 
-		// Parse numeric fields from strings to numbers
 		const moreInfo: MoreInfo = {
 			...rest,
 			norad: parseInt(jsonData.norad, 10),
@@ -76,51 +88,48 @@ const useFetchData = (): UseFetchDataResult => {
 			expectedLifetime: jsonData.expectedLifetime
 				? parseInt(jsonData.expectedLifetime, 10)
 				: undefined,
-			source: sources.length > 0 ? sources : undefined, // Add sources array if not empty
+			source: sources.length > 0 ? sources : undefined,
 		};
 
 		return moreInfo;
 	}
 
-	const observer_lat = 41.677071;
-	const observer_lng = -71.259804;
+	const observer_lat = coordinates.lat;
+	const observer_lng = coordinates.lon;
 	const observer_alt = 0;
-	const search_radius = 25;
-	const category_id = 0;
+	const search_radius = radius;
+	const category_id = category.valueOf();
 
-	const API_ENDPOINT =
-		"https://corsproxy.io/?" +
-		encodeURIComponent(
-			`https://api.n2yo.com/rest/v1/satellite/above/${observer_lat}/${observer_lng}/${observer_alt}/${search_radius}/${category_id}/&apiKey=332V8J-QN86HZ-T2Y59U-58KC`
-		);
+	const API_ENDPOINT = encodeURIComponent(
+		`https://api.n2yo.com/rest/v1/satellite/above/${observer_lat}/${observer_lng}/${observer_alt}/${search_radius}/${category_id}/&apiKey=332V8J-QN86HZ-T2Y59U-58KC`
+	);
+
+	const CORS_ENDPOINT = "https://corsproxy.io/?" + API_ENDPOINT;
 
 	useEffect(() => {
-		// localStorage.clear();
+		console.log(`FETCHING DATA from category: ${Category[category]}`);
+		localStorage.clear();
 		const fetchSatellites = async () => {
 			setIsPending(true);
 			try {
-				const response = await axios.get<ApiResponse>(API_ENDPOINT);
+				const response = await axios.get<ApiResponse>(CORS_ENDPOINT);
+
 				const nonDebrisSatellites = response.data.above.filter(
 					(satellite) => !satellite.satname.includes("DEB")
 				);
 				localStorage.setItem("satellites", JSON.stringify(nonDebrisSatellites));
 				setN2YOSatellites(nonDebrisSatellites);
 				setIsPending(false);
+				setError(null);
 			} catch (err) {
 				setError(err as Error);
 				setIsPending(false);
+				console.log(err);
 			}
 		};
 
-		const localStorageData = localStorage.getItem("satellites");
-		if (localStorageData) {
-			const parsedLocalStorage: Satellite[] = JSON.parse(localStorageData);
-			setN2YOSatellites(parsedLocalStorage);
-			setIsPending(false);
-		} else {
-			fetchSatellites();
-		}
-	}, []);
+		fetchSatellites();
+	}, [coordinates, category, radius]);
 
 	useEffect(() => {
 		// adding more info in here
@@ -141,7 +150,7 @@ const useFetchData = (): UseFetchDataResult => {
 		}
 	}, [N2YOsatellites]);
 
-	return { satellites, isPending, error };
+	return { satellites, isPending, error, API_ENDPOINT };
 };
 
 export default useFetchData;

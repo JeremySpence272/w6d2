@@ -46,3 +46,72 @@ export type MoreInfo = {
 export interface SatelliteInfoCollection {
 	[satId: string]: any;
 }
+
+export type Coordinates = {
+	lat: number;
+	lon: number;
+};
+
+export type ControlsType = {
+	coordinates: Coordinates;
+	category: Category;
+	radius: number;
+};
+
+export enum Category {
+	All = 0,
+	Brightest,
+	ISS,
+	Weather,
+	NOAA,
+	GOES,
+	EarthResources,
+	DisasterMonitoring,
+	SearchAndRescue,
+	TrackingAndDataRelaySatelliteSystem,
+	Geostationary,
+	Intelsat,
+	Gorizont,
+	Raduga,
+	Molniya,
+	Iridium,
+	Orbcomm,
+	Globalstar,
+	AmateurRadio,
+	Experimental,
+	GlobalPositioningSystemOperational,
+	GlonassOperational,
+	Galileo,
+	SatelliteBasedAugmentationSystem,
+	NavyNavigationSatelliteSystem,
+	RussianLEONavigation,
+	SpaceAndEarthScience,
+	Geodetic,
+	Engineering,
+	Education,
+	Military,
+	RadarCalibration,
+	CubeSats,
+	TV,
+	XMSirius,
+	BeidouNavigationSystem,
+	Yaogan,
+	WestfordNeedles,
+	Parus,
+	Gonets,
+	Strela,
+	Tselina,
+	Tsikada,
+	Tsiklon,
+	O3BNetworks,
+	Celestis,
+	IRNSS,
+	QZSS,
+	Flock,
+	Lemur,
+	GlobalPositioningSystemConstellation,
+	GlonassConstellation,
+	Starlink,
+	OneWeb,
+	ChineseSpaceStation,
+}
