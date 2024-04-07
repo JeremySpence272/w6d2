@@ -108,7 +108,6 @@ const useFetchData = ({
 
 	useEffect(() => {
 		console.log(`FETCHING DATA from category: ${Category[category]}`);
-		localStorage.clear();
 		const fetchSatellites = async () => {
 			setIsPending(true);
 			try {
