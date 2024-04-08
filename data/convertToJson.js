@@ -1,12 +1,9 @@
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
 import fs from "fs";
 import csv from "csvtojson";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const path = "./satellite-more-info.csv";
 
-const path = join(__dirname, "satellite-more-info.csv");
+// convert csv to json for all more info files
 
 csv()
 	.fromFile(path)
@@ -17,7 +14,7 @@ csv()
 		}, {});
 
 		fs.writeFileSync(
-			join(__dirname, "satellite-more-info.json"),
+			"./satellite-more-info2.json",
 			JSON.stringify(satellites, null, 2)
 		);
 	});

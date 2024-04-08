@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../css/satelliteTableStyles.css";
-import { MoreInfo, Satellite } from "../types";
+import { Satellite } from "../types";
 import MoreInfoSection from "./MoreInfoSection";
 
 interface SatelliteTableProps {

@@ -11,6 +11,7 @@ const Controls: React.FC<ControlsProps> = ({
 	handleChangeControls,
 	currentControls,
 }) => {
+	// create local instances of the controls to update when fields are changed but not submitted yet
 	const [localCoordinates, setLocalCoordinates] = useState<Coordinates>(
 		currentControls.coordinates
 	);
@@ -20,6 +21,8 @@ const Controls: React.FC<ControlsProps> = ({
 	const [localRadius, setLocalRadius] = useState<number>(
 		currentControls.radius
 	);
+
+	// handle local form field updates
 
 	const handleLocationUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setLocalCoordinates((curr) => ({
@@ -33,16 +36,17 @@ const Controls: React.FC<ControlsProps> = ({
 		setLocalCategory(Category[key]);
 	};
 
+	const handleRadiusUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setLocalRadius(Number(e.target.value));
+	};
+
+	// helper to convert from camel case to readable string for the categories
 	const convertToReadableCategory = (cat: string): string => {
-		if (cat === cat.toUpperCase()) return cat;
+		if (cat === cat.toUpperCase()) return cat; // handles case of uppercase abbreviations like ISS
 		return cat
 			.toString()
 			.split(/(?=[A-Z])/)
 			.join(" ");
-	};
-
-	const handleRadiusUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setLocalRadius(Number(e.target.value));
 	};
 
 	return (

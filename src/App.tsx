@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useFetchData from "./hooks/useFetchData";
 import { Category, ControlsType } from "./types";
 import SatelliteTable from "./components/SatelliteTable";
@@ -15,6 +15,7 @@ const App: React.FC = () => {
 		radius: 25,
 	};
 
+	// parse saved controls state from local storage or load default if nothing found
 	const [controls, setControls] = useState<ControlsType>(() => {
 		const localStorageData = localStorage.getItem("controls");
 		if (localStorageData) {
@@ -24,12 +25,14 @@ const App: React.FC = () => {
 		}
 	});
 
-	const { satellites, isPending, error, API_ENDPOINT } = useFetchData({
+	//pass in controls individually so they can be added to useEffect dependency so if any of them change data will reload
+	const { satellites, isPending, error } = useFetchData({
 		coordinates: controls.coordinates,
 		category: controls.category,
 		radius: controls.radius,
 	});
 
+	// save new controls
 	const handleChangeControls = (newControls: ControlsType): void => {
 		setControls(newControls);
 		localStorage.setItem("controls", JSON.stringify(newControls));
@@ -37,17 +40,16 @@ const App: React.FC = () => {
 
 	return (
 		<>
-			<h1>Satellites</h1>
+			<h1>Satellite Finder</h1>
 			<Controls
 				handleChangeControls={handleChangeControls}
 				currentControls={controls}
 			/>
 			{isPending && <h4>Loading...</h4>}
-			{error && <h4>No satellites found, update search criteria</h4>}
+			{error && <h4>No satellites found. Update search parameters.</h4>}
 			{!isPending && !error && satellites && (
 				<>
 					<h4>Displaying {satellites.length} satellites</h4>
-					{/* <p>{decodeURIComponent(API_ENDPOINT)}</p> >>used for testing<< */}
 					<SatelliteTable satellites={satellites} />
 				</>
 			)}

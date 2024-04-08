@@ -1,5 +1,8 @@
 .more-info-list {
 	text-align: left;
+	display: flex;
+	flex-direction: column;
+	margin: 40px auto;
 }
 
 .more-info-key {

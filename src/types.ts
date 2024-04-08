@@ -14,7 +14,7 @@ export interface ApiResponse {
 
 export type MoreInfo = {
 	name: string;
-	norad: number;
+	norad: string;
 	altName?: string;
 	originRegistry?: string; // country/org of UN Registry
 	operatorOwner?: string;
@@ -24,16 +24,16 @@ export type MoreInfo = {
 	detailedPurpose?: string;
 	orbitClass?: string;
 	orbitType?: string;
-	longGEO?: number;
-	perigree?: number;
-	apogee?: number;
-	eccentricity?: number;
-	inclination?: number;
-	period?: number;
-	launchMass?: number;
-	dryMass?: number;
+	longGEO?: string;
+	perigree?: string;
+	apogee?: string;
+	eccentricity?: string;
+	inclination?: string;
+	period?: string;
+	launchMass?: string;
+	dryMass?: string;
 	launchDate?: string;
-	expectedLifetime?: number;
+	expectedLifetime?: string;
 	contractor?: string;
 	contractorCountry?: string;
 	launchSite?: string;
@@ -42,10 +42,6 @@ export type MoreInfo = {
 	comments?: string;
 	source?: string[];
 };
-
-export interface SatelliteInfoCollection {
-	[satId: string]: any;
-}
 
 export type Coordinates = {
 	lat: number;
